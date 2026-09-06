@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
+    <PackageReference Include="MassTransit" Version="8.5.2" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="xunit" Version="2.5.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.5.3" />
@@ -18,6 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Fgc.Payments.Api\Fgc.Payments.Api.csproj" />
+    <ProjectReference Include="..\..\src\Fgc.Payments.Application\Fgc.Payments.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Fgc.MessageContracts" Version="1.0.1" />
+    <PackageReference Include="Fgc.MessageContracts" Version="1.0.3" />
+    <PackageReference Include="MassTransit" Version="8.5.2" />
   </ItemGroup>
 
   <ItemGroup>

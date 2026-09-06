@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MassTransit" Version="8.5.2" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.5.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Fgc.Payments.Application\Fgc.Payments.Application.csproj" />
     <ProjectReference Include="..\Fgc.Payments.Domain\Fgc.Payments.Domain.csproj" />
   </ItemGroup>
