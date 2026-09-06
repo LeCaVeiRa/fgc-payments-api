@@ -137,4 +137,3 @@ Como não há endpoints HTTP, verificar o funcionamento é feito via log (`ILogg
 **Integrantes**
 
 * Yan Santos Wendt
-* Ronnam de Lima da Silva
