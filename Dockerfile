@@ -1,5 +1,5 @@
 # === STAGE 1: BUILD ===
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.427 AS build
 WORKDIR /src
 # Pacotes locais (Fgc.MessageContracts)
 COPY LocalPackages ./LocalPackages
@@ -15,8 +15,10 @@ COPY . .
 WORKDIR "/src/Fgc.Payments/src/Fgc.Payments.Api"
 RUN dotnet publish "Fgc.Payments.Api.csproj" -c Release -o /app/publish
 # === STAGE 2: RUNTIME ===
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.33 AS runtime
 WORKDIR /app
 EXPOSE 8080
 COPY --from=build /app/publish .
+# Usuário não-root embutido na imagem aspnet (UID 1654); porta 8080 não exige privilégio.
+USER $APP_UID
 ENTRYPOINT ["dotnet", "Fgc.Payments.Api.dll"]

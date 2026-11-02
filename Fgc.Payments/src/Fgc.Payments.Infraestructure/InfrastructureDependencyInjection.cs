@@ -9,6 +9,12 @@ namespace Fgc.Payments.Infraestructure
 {
     public static class InfrastructureDependencyInjection
     {
+        // Credenciais do broker não têm default: vêm de env/.env (compose) ou Secret (K8s).
+        private static string RequiredSetting(IConfiguration configuration, string key) =>
+            configuration[key] is { Length: > 0 } value
+                ? value
+                : throw new InvalidOperationException($"Missing configuration '{key}' (env {key.Replace(":", "__")}).");
+
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IPaymentService, PaymentService>();
@@ -19,8 +25,8 @@ namespace Fgc.Payments.Infraestructure
             var rabbitUseSsl = configuration.GetValue<bool>("RabbitMq:UseSsl");
             var rabbitPort = configuration.GetValue<int?>("RabbitMq:Port") ?? (rabbitUseSsl ? 5671 : 5672);
             var rabbitVirtualHost = configuration["RabbitMq:VirtualHost"] ?? "/";
-            var rabbitUsername = configuration["RabbitMq:Username"] ?? "admin";
-            var rabbitPassword = configuration["RabbitMq:Password"] ?? "admin";
+            var rabbitUsername = RequiredSetting(configuration, "RabbitMq:Username");
+            var rabbitPassword = RequiredSetting(configuration, "RabbitMq:Password");
 
             services.AddMassTransit(x =>
             {
