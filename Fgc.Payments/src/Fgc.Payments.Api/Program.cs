@@ -23,7 +23,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+// TLS termina no ALB/Kong; o container só escuta HTTP:8080. Redirect só quando explicitamente pedido.
+if (app.Configuration.GetValue<bool>("Https:Redirect"))
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthorization();
 
