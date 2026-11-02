@@ -11,6 +11,9 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
+// Sem banco/cache: readiness depende só do broker (check registrado automaticamente pelo MassTransit, tag "ready").
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,5 +28,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+var liveHealth = new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions { Predicate = _ => false };
+app.MapHealthChecks("/health", liveHealth);
+app.MapHealthChecks("/health/live", liveHealth);
+app.MapHealthChecks("/health/ready", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+    Predicate = c => c.Tags.Contains("ready")
+});
 
 app.Run();
