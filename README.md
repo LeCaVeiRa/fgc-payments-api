@@ -108,9 +108,11 @@ dotnet test tests/Fgc.Payments.IntegrationTests
 * .NET SDK 8+
 * RabbitMQ rodando (via `fgc-orchestration/` ou standalone)
 
-### Variáveis de Ambiente (`appsettings.json`)
+### Variáveis de Ambiente
 
-* `RabbitMq:Host`, `RabbitMq:Port`, `RabbitMq:VirtualHost`, `RabbitMq:Username`, `RabbitMq:Password`, `RabbitMq:UseSsl`
+* `RabbitMq__Host`, `RabbitMq__Username`, `RabbitMq__Password` (obrigatórias, sem valor padrão), `RabbitMq__Port`, `RabbitMq__VirtualHost`, `RabbitMq__UseSsl`
+
+Localmente vêm do `.env` de `fgc-orchestration`. No EKS vêm do Secrets Manager `fgc/payments`, via External Secrets.
 
 ### Execução via Docker
 
@@ -128,7 +130,11 @@ dotnet restore
 dotnet run --project Fgc.Payments/src/Fgc.Payments.Api
 ```
 
-Como não há endpoints HTTP, verificar o funcionamento é feito via log (`ILogger`) ao publicar um `OrderPlacedEvent`, ou rodando os testes de integração.
+Não há endpoints de negócio. O funcionamento é verificado pelo log (`ILogger`) ao publicar um `OrderPlacedEvent`, ou rodando os testes de integração. Os health checks ficam em `/health/live` e `/health/ready` (broker).
+
+## ☸️ Kubernetes
+
+`k8s/` (ServiceAccount, ConfigMap, ExternalSecret `fgc/payments`) e `k8s/app/` (Deployment com 2 réplicas e rolling update sem indisponibilidade, Service ClusterIP), aplicados por `fgc-orchestration/scripts/deploy-aws.sh`.
 
 ---
 
