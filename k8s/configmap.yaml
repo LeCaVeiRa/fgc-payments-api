@@ -1,0 +1,15 @@
+# Só valores estáticos. Segredos e endpoints que mudam a cada `terraform apply` (host do broker,
+# banco, Redis, OpenSearch) vêm do Secret fgc-payments-api-secret (ExternalSecret <- Secrets Manager fgc/payments).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fgc-payments-api-config
+data:
+  ASPNETCORE_ENVIRONMENT: "Production"
+  ASPNETCORE_URLS: "http://+:8080"
+  # TLS termina no ALB; honra X-Forwarded-* vindos do ALB/Kong.
+  ASPNETCORE_FORWARDEDHEADERS_ENABLED: "true"
+  AWS_REGION: "us-east-2"
+  RabbitMq__Port: "5671"
+  RabbitMq__VirtualHost: "/"
+  RabbitMq__UseSsl: "true"
